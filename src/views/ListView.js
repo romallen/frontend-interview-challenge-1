@@ -9,18 +9,20 @@ import {
   TableBody,
   TableCell,
   TableContainer,
-
   TableHead,
   TableRow,
 } from "@mui/material";
 import axios from "axios";
 import { LoadingComponent } from "../components/LoadingComponent";
 import { ErrorComponent } from "../components/ErrorComponent";
+import { DetailsModal } from "./DetailsModal";
 export function ListView() {
   const [pageData, setPageData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [fetchError, setFetchError] = useState(null);
+  const [detailsModalOpen, setDetailsModalOpen] = useState(false);
+  const [selectedRowID, setSelectedRowID] = useState(null);
 
   useEffect(() => {
     setIsLoading(true);
@@ -45,6 +47,13 @@ export function ListView() {
       });
   };
 
+  const handleRowClick = (id) => {
+    setIsLoading(true);
+
+    setDetailsModalOpen(true);
+    setSelectedRowID(id);
+  };
+
   return (
     <Container>
       {fetchError ? (
@@ -67,7 +76,7 @@ export function ListView() {
               </TableHead>
               <TableBody>
                 {pageData.results.map((row, i) => (
-                  <TableRow key={i} hover={true}>
+                  <TableRow key={i} hover={true}  onClick={()=> handleRowClick(pageData.results[i].id)}>
                     <TableCell component="th" scope="row">
                       {row.id}
                     </TableCell>
@@ -110,9 +119,19 @@ export function ListView() {
               </Button>
             </Box>
           </TableContainer>
-         
         </Box>
-      ) : <Box sx={{pt: 10}}>Could Not Load Data</Box>}
+      ) : (
+        <Box sx={{ pt: 10 }}>Could Not Load Data</Box>
+      )}
+
+      {detailsModalOpen && (
+        <DetailsModal
+          id={selectedRowID}
+          setDetailsModalOpen={setDetailsModalOpen}
+            detailsModalOpen={detailsModalOpen}
+          setIsLoading={setIsLoading}
+        />
+      )}
     </Container>
   );
 }
