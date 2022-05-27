@@ -152,21 +152,42 @@ export function AddModal(props) {
                 sx={{ mr: 1 }}
                 required
               ></TextField>
-             {newPersonData.birthday
-                  ? `(${
-                      new Date().getFullYear() -
-                      new Date(newPersonData.birthday).getFullYear()
-                    } years old)`
-                  : null}
+              {newPersonData.birthday
+                ? `(${
+                    new Date().getFullYear() -
+                    new Date(newPersonData.birthday).getFullYear()
+                  } years old)`
+                : null}
+            </ListItem>
+            <ListItem>
+              <Typography sx={{ mr: 2 }}>Favorite Color: </Typography>
+              {newPersonData.favoriteColor ? (
+                `(${newPersonData.favoriteColor})`
+              ) : (
+                <TextField
+                  placeholder="Pick a Color"
+                  value={newPersonData.favoriteColor}
+                  sx={{ width: "20%", ml: 1 }}
+                  variant="standard"
+                  required
+                ></TextField>
+              )}
+
+              <TextField
+                id="favoriteColor"
+                type="color"
+                sx={{ width: "15%", ml: 1 }}
+                variant="standard"
+              ></TextField>
             </ListItem>
             <ListItem>
               <Typography sx={{ mr: 2 }}>Comment: </Typography>
               <TextField
-                  id="comment"
-                  variant="outlined"
-                  rows={2}
-                  multiline
-                ></TextField>
+                id="comment"
+                variant="outlined"
+                rows={2}
+                multiline
+              ></TextField>
             </ListItem>
           </List>
         </FormGroup>
