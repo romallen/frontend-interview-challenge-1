@@ -14,7 +14,6 @@ import {
   Typography,
 } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
-import { AddCircle } from "@mui/icons-material";
 import axios from "axios";
 import { customAlphabet } from "nanoid";
 
@@ -46,7 +45,6 @@ export function AddModal(props) {
     const books = chipBookData.map((book) => book.label);
     const data = { ...newPersonData, favoriteBooks: books };
 
-
     axios
       .post(`http://localhost:3000/persons`, data)
       .then((res) => {
@@ -76,10 +74,25 @@ export function AddModal(props) {
       >
         <FormGroup
           onChange={(e) => {
-            setNewPersonData({
-              ...newPersonData,
-              [e.target.id]: e.target.value,
-            });
+            if (
+              e.target.id === "country" ||
+              e.target.id === "streetName" ||
+              e.target.id === "city" ||
+              e.target.id === "postalCode"
+            ) {
+              setNewPersonData({
+                ...newPersonData,
+                address: {
+                  ...newPersonData.address,
+                  [e.target.id]: e.target.value,
+                },
+              });
+            } else {
+              setNewPersonData({
+                ...newPersonData,
+                [e.target.id]: e.target.value,
+              });
+            }
           }}
         >
           <List>
@@ -259,14 +272,14 @@ export function AddModal(props) {
             mx: 2,
           }}
         >
-              <Button
-                variant="contained"
-                size="small"
-                sx={{ mr: 1 }}
-                onClick={() => props.setAddModalOpen(false)}
-              >
-                Cancel
-              </Button>
+          <Button
+            variant="contained"
+            size="small"
+            sx={{ mr: 1 }}
+            onClick={() => props.setAddModalOpen(false)}
+          >
+            Cancel
+          </Button>
           <LoadingButton
             type="submit"
             // loading={isUpdateLoading}
