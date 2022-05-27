@@ -182,6 +182,7 @@ export function AddModal(props) {
                 id="favoriteBooks"
                 inputProps={{ minLength: 10, maxLength: 11 }}
                 type="text"
+                value= {newPersonData.favoriteBooks}
                 variant="standard"
                 placeholder="10 Digits Book ID"
                 onChange={(e) => {
@@ -195,7 +196,7 @@ export function AddModal(props) {
                     setIsValidBook(true);
                   }
                 }}
-                required
+                required={chipBookData.length === 0}
               ></TextField>
               <Button
                 variant="outlined"
@@ -209,6 +210,10 @@ export function AddModal(props) {
                       label: newPersonData.favoriteBooks,
                     },
                   ]);
+                  setNewPersonData({
+                    ...newPersonData,
+                    favoriteBooks: "",
+                  });
                   setIsValidBook(false);
                 }}
               >
