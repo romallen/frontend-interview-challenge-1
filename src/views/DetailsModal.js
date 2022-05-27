@@ -106,7 +106,6 @@ export function DetailsModal(props) {
           >
             <FormGroup
               onChange={(e) => {
-                console.log(e.target.value);
                 setPersonData({
                   ...personData,
                   [e.target.id]: e.target.value,
