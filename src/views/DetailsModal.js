@@ -57,6 +57,7 @@ export function DetailsModal(props) {
         } else {
           props.setDetailsModalOpen(false);
           setIsUpdateLoading(false);
+          props.setIsSuccessful({isSuccessful: true, successMessage: "Updated successfully"});
         }
       })
       .catch((err) => {
@@ -76,6 +77,8 @@ export function DetailsModal(props) {
         } else {
           setIsDeleteLoading(false);
           props.setDetailsModalOpen(false);
+          props.setIsSuccessful({isSuccessful: true, successMessage: "Deleted successfully"});
+
         }
       })
       .catch((err) => {

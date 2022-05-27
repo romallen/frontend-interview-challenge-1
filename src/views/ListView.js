@@ -15,6 +15,7 @@ import { AddCircle } from "@mui/icons-material";
 import axios from "axios";
 import { LoadingComponent } from "../components/LoadingComponent";
 import { ErrorComponent } from "../components/ErrorComponent";
+import { SuccessComponent } from "../components/SuccessComponent";
 import { DetailsModal } from "./DetailsModal";
 import { AddModal } from "./AddModal";
 export function ListView() {
@@ -25,6 +26,7 @@ export function ListView() {
     isError: false,
     errorMessage: null,
   });
+  const [success, setSuccess] = useState({isSuccessful: false, successMessage: null})
   const [detailsModalOpen, setDetailsModalOpen] = useState(false);
   const [selectedRowID, setSelectedRowID] = useState(null);
   const [addModalOpen, setAddModalOpen] = useState(false);
@@ -64,7 +66,7 @@ export function ListView() {
       {fetchError.isError ? (
         <ErrorComponent error={fetchError} setError={setFetchError} />
       ) : null}
-
+      {success.isSuccessful ? (<SuccessComponent success={success}  setSuccess={setSuccess}/>): null}
       {isLoading ? <LoadingComponent isLoading={isLoading} /> : null}
 
       {pageData ? (
@@ -156,6 +158,8 @@ export function ListView() {
           setDetailsModalOpen={setDetailsModalOpen}
           detailsModalOpen={detailsModalOpen}
           setIsLoading={setIsLoading}
+          setIsSuccessful={setSuccess}
+
         />
       )}
       {addModalOpen && (
@@ -163,6 +167,7 @@ export function ListView() {
           addModalOpen={addModalOpen}
           setAddModalOpen={setAddModalOpen}
           setIsLoading={setIsLoading}
+          setIsSuccessful={setSuccess}
         />
       )}
     </Container>

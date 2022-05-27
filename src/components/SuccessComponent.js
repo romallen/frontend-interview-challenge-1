@@ -1,16 +1,17 @@
 import { Alert, Snackbar } from "@mui/material";
 
-export function ErrorComponent(props) {
+export function SuccessComponent(props) {
 
   const handleCloseSnackbar = (event, reason) => {
+
     if (reason === "clickaway") {
       return;
     }
-    props.setError({isError: false, errorMessage: null});
+    props.setSuccess({isSuccessful: false, successMessage: null});
   };
   return (
     <Snackbar
-      open={props.error.isError}
+      open={props.success.isSuccessful}
       autoHideDuration={10000}
       onClose={handleCloseSnackbar}
       sx={{ width: "100%" }}
@@ -19,11 +20,11 @@ export function ErrorComponent(props) {
       <Alert
         onClose={handleCloseSnackbar}
         variant="filled"
-        severity="error"
+        severity="success"
         sx={{ width: "100%" }}
        
       >
-        {props.error.errorMessage}
+        {props.success.successMessage}
       </Alert>
     </Snackbar>
   );

@@ -61,6 +61,7 @@ export function AddModal(props) {
         } else {
           props.setAddModalOpen(false);
           props.setIsLoading(false);
+          props.setIsSuccessful({isSuccessful: true, successMessage: "Added successfully"});
         }
       })
       .catch((err) => {
