@@ -31,6 +31,21 @@ export function DetailsModal(props) {
     }
   }, [props.id]);
 
+  const handleUpdateClick = () => {
+    setIsUpdateLoading(true);
+
+    axios
+      .patch(`http://localhost:3000/persons/${personData.id}`, personData)
+      .then((res) => {
+        props.setDetailsModalOpen(false);
+        setIsUpdateLoading(false);
+      })
+      .catch((err) => {
+        setIsUpdateLoading(false);
+        console.log("Error: ", err);
+      });
+  };
+
   return (
     <Modal open={props.detailsModalOpen}>
       {personData ? (
@@ -143,27 +158,25 @@ export function DetailsModal(props) {
               </ListItem>
             </List>
           </FormGroup>
-         
-               
-                <Box>
-                  <Button
-                    variant="contained"
-                    sx={{ mr: 1 }}
-                    onClick={() => props.setDetailsModalOpen(false)}
-                  >
-                    Cancel
-                  </Button>
-                  <LoadingButton
-                    type="submit"
-                    onClick={() => console.log("update")}
-                    loading={isUpdateLoading}
-                    loadingIndicator="UPDATING..."
-                    variant="contained"
-                  >
-                    UPDATE
-                  </LoadingButton>
-                </Box>
-                
+
+          <Box>
+            <Button
+              variant="contained"
+              sx={{ mr: 1 }}
+              onClick={() => props.setDetailsModalOpen(false)}
+            >
+              Cancel
+            </Button>
+            <LoadingButton
+              type="submit"
+              onClick={handleUpdateClick}
+              loading={isUpdateLoading}
+              loadingIndicator="UPDATING..."
+              variant="contained"
+            >
+              UPDATE
+            </LoadingButton>
+          </Box>
         </Box>
       ) : (
         <Box>loading</Box>

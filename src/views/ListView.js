@@ -27,7 +27,7 @@ export function ListView() {
   useEffect(() => {
     setIsLoading(true);
     fetchPageData(currentPage);
-  }, [currentPage]);
+  }, [currentPage, detailsModalOpen]);
 
   const fetchPageData = (num) => {
     axios
@@ -76,7 +76,11 @@ export function ListView() {
               </TableHead>
               <TableBody>
                 {pageData.results.map((row, i) => (
-                  <TableRow key={i} hover={true}  onClick={()=> handleRowClick(pageData.results[i].id)}>
+                  <TableRow
+                    key={i}
+                    hover={true}
+                    onClick={() => handleRowClick(pageData.results[i].id)}
+                  >
                     <TableCell component="th" scope="row">
                       {row.id}
                     </TableCell>
@@ -128,7 +132,7 @@ export function ListView() {
         <DetailsModal
           id={selectedRowID}
           setDetailsModalOpen={setDetailsModalOpen}
-            detailsModalOpen={detailsModalOpen}
+          detailsModalOpen={detailsModalOpen}
           setIsLoading={setIsLoading}
         />
       )}
