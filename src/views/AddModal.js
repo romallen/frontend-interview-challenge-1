@@ -16,6 +16,7 @@ import {
 import LoadingButton from "@mui/lab/LoadingButton";
 import axios from "axios";
 import { customAlphabet } from "nanoid";
+import { ErrorComponent } from "../components/ErrorComponent";
 
 const nanoid = customAlphabet("1234567890abcdef", 13);
 const personDataSchema = {
@@ -40,6 +41,10 @@ export function AddModal(props) {
   const [newPersonData, setNewPersonData] = useState(personDataSchema);
   const [chipBookData, setChipBookData] = useState([]);
   const [isValidBook, setIsValidBook] = useState(false);
+  const [addError, setAddError] = useState({
+    isError: false,
+    errorMessage: null,
+  });
 
   const handleAddClick = () => {
     const books = chipBookData.map((book) => book.label);
@@ -48,14 +53,23 @@ export function AddModal(props) {
     axios
       .post(`http://localhost:3000/persons`, data)
       .then((res) => {
-        console.log(res.data);
+        if (res.data.errors) {
+          setAddError({
+            isError: true,
+            errorMessage: res.data.errors[0],
+          });
+        } else {
+          props.setAddModalOpen(false);
+          props.setIsLoading(false);
+        }
       })
       .catch((err) => {
+        props.setIsLoading(false);
+        setAddError({ isError: true, errorMessage: err.message });
         console.log("Error: ", err);
       });
   };
 
-  console.log("books", chipBookData);
   const handleDelete = (chipToDelete) => {
     setChipBookData((chips) =>
       chips.filter((chip) => chip.key !== chipToDelete.key)
@@ -64,7 +78,11 @@ export function AddModal(props) {
 
   return (
     <Modal open={props.addModalOpen}>
-      <Box
+        <Box>
+        {addError.isError ? (
+          <ErrorComponent error={addError} setError={setAddError} />
+        ) : null}
+        <Box
         component="form"
         onSubmit={(e) => {
           e.preventDefault();
@@ -182,7 +200,7 @@ export function AddModal(props) {
                 id="favoriteBooks"
                 inputProps={{ minLength: 10, maxLength: 11 }}
                 type="text"
-                value= {newPersonData.favoriteBooks}
+                value={newPersonData.favoriteBooks}
                 variant="standard"
                 placeholder="10 Digits Book ID"
                 onChange={(e) => {
@@ -295,6 +313,8 @@ export function AddModal(props) {
           </LoadingButton>
         </Box>
       </Box>
+        </Box>
+      
     </Modal>
   );
 }

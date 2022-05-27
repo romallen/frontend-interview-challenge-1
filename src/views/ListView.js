@@ -32,7 +32,7 @@ export function ListView() {
   useEffect(() => {
     setIsLoading(true);
     fetchPageData(currentPage);
-  }, [currentPage, detailsModalOpen]);
+  }, [currentPage, detailsModalOpen, addModalOpen]);
 
   const fetchPageData = (num) => {
     axios
