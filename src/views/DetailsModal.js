@@ -1,19 +1,20 @@
 import { useEffect, useState } from "react";
 import {
   Box,
-  Container,
+  Button,
   FormGroup,
-  FormLabel,
   List,
   ListItem,
   Modal,
   TextField,
   Typography,
 } from "@mui/material";
+import LoadingButton from "@mui/lab/LoadingButton";
 import axios from "axios";
 
 export function DetailsModal(props) {
   const [personData, setPersonData] = useState(null);
+  const [isUpdateLoading, setIsUpdateLoading] = useState(false);
 
   useEffect(() => {
     if (props.id) {
@@ -39,20 +40,16 @@ export function DetailsModal(props) {
             e.preventDefault();
             // handleUpdateClick();
           }}
-          sx={{ bgcolor: "#ffffff", m: "0 auto", width: "90%", py: 2 }}
+          sx={{ bgcolor: "#ffffff", m: "0 auto", width: "70%", py: 2 }}
         >
           <FormGroup
             onChange={(e) => {
+              console.log(e.target.value);
               setPersonData({
                 ...personData,
                 [e.target.id]: e.target.value,
               });
             }}
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-            }}
-            // row
           >
             <List>
               <ListItem>
@@ -146,6 +143,27 @@ export function DetailsModal(props) {
               </ListItem>
             </List>
           </FormGroup>
+         
+               
+                <Box>
+                  <Button
+                    variant="contained"
+                    sx={{ mr: 1 }}
+                    onClick={() => props.setDetailsModalOpen(false)}
+                  >
+                    Cancel
+                  </Button>
+                  <LoadingButton
+                    type="submit"
+                    onClick={() => console.log("update")}
+                    loading={isUpdateLoading}
+                    loadingIndicator="UPDATING..."
+                    variant="contained"
+                  >
+                    UPDATE
+                  </LoadingButton>
+                </Box>
+                
         </Box>
       ) : (
         <Box>loading</Box>
