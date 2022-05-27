@@ -1,5 +1,15 @@
 import { useEffect, useState } from "react";
-import { Box, Container, Modal } from "@mui/material";
+import {
+  Box,
+  Container,
+  FormGroup,
+  FormLabel,
+  List,
+  ListItem,
+  Modal,
+  TextField,
+  Typography,
+} from "@mui/material";
 import axios from "axios";
 
 export function DetailsModal(props) {
@@ -22,7 +32,124 @@ export function DetailsModal(props) {
 
   return (
     <Modal open={props.detailsModalOpen}>
-      {personData ? <Box>person data</Box> : <Box>loading</Box>}
+      {personData ? (
+        <Box
+          component="form"
+          onSubmit={(e) => {
+            e.preventDefault();
+            // handleUpdateClick();
+          }}
+          sx={{ bgcolor: "#ffffff", m: "0 auto", width: "90%", py: 2 }}
+        >
+          <FormGroup
+            onChange={(e) => {
+              setPersonData({
+                ...personData,
+                [e.target.id]: e.target.value,
+              });
+            }}
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+            }}
+            // row
+          >
+            <List>
+              <ListItem>
+                <Typography sx={{ mr: 2 }}>ID: </Typography>
+                <Typography sx={{ mr: 2 }}>{personData.id} </Typography>
+              </ListItem>
+              <ListItem>
+                <Typography sx={{ mr: 2 }}>Title: </Typography>
+                <Typography sx={{ mr: 2 }}>{personData.title} </Typography>
+              </ListItem>
+              <ListItem>
+                <Typography sx={{ mr: 2 }}> First Name: </Typography>
+                <TextField
+                  id="firstName"
+                  variant="outlined"
+                  defaultValue={personData.firstName}
+                  required
+                ></TextField>
+              </ListItem>
+              <ListItem>
+                <Typography sx={{ mr: 2 }}> Last Name: </Typography>
+                <TextField
+                  id="lastName"
+                  variant="outlined"
+                  defaultValue={personData.lastName}
+                  required
+                ></TextField>
+              </ListItem>
+              <ListItem></ListItem>
+              <ListItem>
+                <Typography sx={{ mr: 2 }}>Email: </Typography>
+                <Typography sx={{ mr: 2 }}>{personData.email} </Typography>
+              </ListItem>
+              <ListItem>
+                <Typography sx={{ mr: 2 }}>Gender: </Typography>
+                <Typography sx={{ mr: 2 }}>{personData.gender} </Typography>
+              </ListItem>
+              <ListItem>
+                <Typography sx={{ mr: 2 }}>Address: </Typography>
+              </ListItem>
+
+              <ListItem>
+                <Typography sx={{ mr: 2 }}>Country: </Typography>
+                <Typography sx={{ mr: 2 }}>
+                  {personData.address.country}{" "}
+                </Typography>
+              </ListItem>
+              <ListItem>
+                <Typography sx={{ mr: 2 }}> Street Name: </Typography>
+                <Typography sx={{ mr: 2 }}>
+                  {personData.address.streetName}
+                </Typography>
+              </ListItem>
+              <ListItem>
+                <Typography sx={{ mr: 2 }}>City: </Typography>
+                <Typography sx={{ mr: 2 }}>
+                  {personData.address.city}{" "}
+                </Typography>
+              </ListItem>
+              <ListItem>
+                <Typography sx={{ mr: 2 }}>Favorite Books: </Typography>
+                <Typography sx={{ mr: 2 }}>
+                  {personData.favoriteBooks.join(", ")}
+                </Typography>
+              </ListItem>
+              <ListItem>
+                <Typography sx={{ mr: 2 }}>Birthday: </Typography>
+
+                <TextField
+                  id="birthday"
+                  defaultValue={personData.birthday}
+                  type="date"
+                  variant="outlined"
+                  sx={{ mr: 1 }}
+                  required
+                ></TextField>
+                {`(${
+                  new Date().getFullYear() -
+                  new Date(personData.birthday).getFullYear()
+                } years old)`}
+              </ListItem>
+              <ListItem>
+                <Typography sx={{ mr: 2 }}>Comment: </Typography>
+                <TextField
+                  id="comment"
+                  defaultValue={personData.comment}
+                  rows={2}
+                  variant="outlined"
+                  sx={{ width: "100%" }}
+                ></TextField>
+              </ListItem>
+            </List>
+          </FormGroup>
+        </Box>
+      ) : (
+        <Box>loading</Box>
+      )}
     </Modal>
   );
 }
