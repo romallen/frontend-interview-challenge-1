@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-
 import {
   Box,
   Button,
@@ -12,17 +11,23 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
+import { AddCircle } from "@mui/icons-material";
 import axios from "axios";
 import { LoadingComponent } from "../components/LoadingComponent";
 import { ErrorComponent } from "../components/ErrorComponent";
 import { DetailsModal } from "./DetailsModal";
+import { AddModal } from "./AddModal";
 export function ListView() {
   const [pageData, setPageData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-  const [fetchError, setFetchError] = useState({isError: false, errorMessage: null});
+  const [fetchError, setFetchError] = useState({
+    isError: false,
+    errorMessage: null,
+  });
   const [detailsModalOpen, setDetailsModalOpen] = useState(false);
   const [selectedRowID, setSelectedRowID] = useState(null);
+  const [addModalOpen, setAddModalOpen] = useState(false);
 
   useEffect(() => {
     setIsLoading(true);
@@ -34,14 +39,14 @@ export function ListView() {
       .get(`http://localhost:3000/persons?page=${num}`)
       .then((res) => {
         if (res.data.errors) {
-          setFetchError({isError: true, errorMessage: res.data.errors[0]});
+          setFetchError({ isError: true, errorMessage: res.data.errors[0] });
         } else {
           setPageData(res.data);
           setIsLoading(false);
         }
       })
       .catch((err) => {
-        setFetchError({isError: true, errorMessage: err.message});
+        setFetchError({ isError: true, errorMessage: err.message });
         setIsLoading(false);
         console.log(err);
       });
@@ -123,6 +128,23 @@ export function ListView() {
               </Button>
             </Box>
           </TableContainer>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "flex-end",
+              alignContent: "flex-end",
+              mt: 2,
+            }}
+          >
+            <AddCircle
+              sx={{
+                fontSize: 50,
+              }}
+              color="primary"
+              onClick={() => setAddModalOpen(true)}
+            />
+          </Box>
         </Box>
       ) : (
         <Box sx={{ pt: 10 }}>Could Not Load Data</Box>
@@ -133,6 +155,13 @@ export function ListView() {
           id={selectedRowID}
           setDetailsModalOpen={setDetailsModalOpen}
           detailsModalOpen={detailsModalOpen}
+          setIsLoading={setIsLoading}
+        />
+      )}
+      {addModalOpen && (
+        <AddModal
+          addModalOpen={addModalOpen}
+          setAddModalOpen={setAddModalOpen}
           setIsLoading={setIsLoading}
         />
       )}
