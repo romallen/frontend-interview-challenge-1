@@ -63,7 +63,7 @@ export function DetailsModal(props) {
   const handleDeleteClick = () => {
     setIsDeleteLoading(true);
     axios
-      .delete(`http://localhost:3000/persodns/${personData.id}`)
+      .delete(`http://localhost:3000/persons/${personData.id}`)
       .then((res) => {
         if (res.data.errors) {
           setDetailsError({isError: true, errorMessage: res.data.errors[0]});
@@ -88,7 +88,6 @@ export function DetailsModal(props) {
           component="form"
           onSubmit={(e) => {
             e.preventDefault();
-            // handleUpdateClick();
           }}
           sx={{ bgcolor: "#ffffff", m: "0 auto", width: "70%", py: 2 }}
         >
