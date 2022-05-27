@@ -39,13 +39,14 @@ const personDataSchema = {
 };
 export function AddModal(props) {
   const [newPersonData, setNewPersonData] = useState(personDataSchema);
-  const [books, setBooks] = useState([]);
   const [chipBookData, setChipBookData] = useState([]);
   const [isValidBook, setIsValidBook] = useState(false);
 
   const handleAddClick = () => {
-      const books = chipBookData.map((book) => book.label);
-      const data = {...newPersonData, favoriteBooks: books};
+    const books = chipBookData.map((book) => book.label);
+    const data = { ...newPersonData, favoriteBooks: books };
+
+
     axios
       .post(`http://localhost:3000/persons`, data)
       .then((res) => {
@@ -58,7 +59,9 @@ export function AddModal(props) {
 
   console.log("books", chipBookData);
   const handleDelete = (chipToDelete) => {
-    setChipBookData((chips) => chips.filter((chip) => chip.key !== chipToDelete.key));
+    setChipBookData((chips) =>
+      chips.filter((chip) => chip.key !== chipToDelete.key)
+    );
   };
 
   return (
@@ -67,13 +70,12 @@ export function AddModal(props) {
         component="form"
         onSubmit={(e) => {
           e.preventDefault();
+          handleAddClick();
         }}
         sx={{ bgcolor: "#ffffff", m: "0 auto", width: "70%", py: 2 }}
       >
         <FormGroup
           onChange={(e) => {
-            console.log(newPersonData);
-
             setNewPersonData({
               ...newPersonData,
               [e.target.id]: e.target.value,
@@ -257,9 +259,16 @@ export function AddModal(props) {
             mx: 2,
           }}
         >
+              <Button
+                variant="contained"
+                size="small"
+                sx={{ mr: 1 }}
+                onClick={() => props.setAddModalOpen(false)}
+              >
+                Cancel
+              </Button>
           <LoadingButton
             type="submit"
-            onClick={handleAddClick}
             // loading={isUpdateLoading}
             loadingIndicator="ADDING..."
             variant="contained"
