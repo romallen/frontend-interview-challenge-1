@@ -89,7 +89,7 @@ export function DetailsModal(props) {
           onSubmit={(e) => {
             e.preventDefault();
           }}
-          sx={{ bgcolor: "#ffffff", m: "0 auto", width: "70%", py: 2 }}
+          sx={{ bgcolor: personData.favoriteColor, m: "0 auto", width: "70%", py: 2 }}
         >
           <FormGroup
             onChange={(e) => {
