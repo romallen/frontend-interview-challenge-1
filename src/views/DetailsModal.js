@@ -18,7 +18,7 @@ export function DetailsModal(props) {
   const [personData, setPersonData] = useState(null);
   const [isUpdateLoading, setIsUpdateLoading] = useState(false);
   const [isDeleteLoading, setIsDeleteLoading] = useState(false);
-  const [detailsError, setDetailsError] = useState(null);
+  const [detailsError, setDetailsError] = useState({isError: false, errorMessage: null});
 
   useEffect(() => {
     if (props.id) {
@@ -26,7 +26,7 @@ export function DetailsModal(props) {
         .get(`http://localhost:3000/persons/${props.id}`)
         .then((res) => {
           if (res.data.errors) {
-            setDetailsError(res.data.errors[0]);
+            setDetailsError({isError: true, errorMessage: res.data.errors[0]});
           } else {
             setPersonData(res.data);
             props.setIsLoading(false);
@@ -34,7 +34,7 @@ export function DetailsModal(props) {
         })
         .catch((err) => {
           props.setIsLoading(false);
-          setDetailsError(err.message);
+          setDetailsError({isError: true, errorMessage: err.message});
           console.log("Error: ", err);
         });
     }
@@ -47,7 +47,7 @@ export function DetailsModal(props) {
       .patch(`http://localhost:3000/persons/${personData.id}`, personData)
       .then((res) => {
         if (res.data.errors) {
-          setDetailsError(res.data.errors[0]);
+          setDetailsError({isError: true, errorMessage: res.data.errors[0]});
         } else {
           props.setDetailsModalOpen(false);
           setIsUpdateLoading(false);
@@ -55,7 +55,7 @@ export function DetailsModal(props) {
       })
       .catch((err) => {
         setIsUpdateLoading(false);
-        setDetailsError(err.message);
+        setDetailsError({isError: true, errorMessage: err.message});
         console.log("Error: ", err);
       });
   };
@@ -63,10 +63,10 @@ export function DetailsModal(props) {
   const handleDeleteClick = () => {
     setIsDeleteLoading(true);
     axios
-      .delete(`http://localhost:3000/persons/${personData.id}`)
+      .delete(`http://localhost:3000/persodns/${personData.id}`)
       .then((res) => {
         if (res.data.errors) {
-          setDetailsError(res.data.errors[0]);
+          setDetailsError({isError: true, errorMessage: res.data.errors[0]});
         } else {
           setIsDeleteLoading(false);
           props.setDetailsModalOpen(false);
@@ -74,7 +74,7 @@ export function DetailsModal(props) {
       })
       .catch((err) => {
         setIsDeleteLoading(false);
-        setDetailsError(err.message);
+        setDetailsError({isError: true, errorMessage: err.message});
         console.log("Error: ", err);
       });
   };
@@ -82,7 +82,7 @@ export function DetailsModal(props) {
   return (
     <Modal open={props.detailsModalOpen}>
         <Box>
-      {detailsError ? <ErrorComponent error={detailsError} /> : null}
+      {detailsError.isError ? <ErrorComponent error={detailsError} setError={setDetailsError} /> : null}
       {personData ? (
         <Box
           component="form"

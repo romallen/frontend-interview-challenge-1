@@ -1,15 +1,17 @@
 import { Alert, Snackbar } from "@mui/material";
 
 export function ErrorComponent(props) {
+
   const handleCloseSnackbar = (event, reason) => {
+      console.log(reason)
     if (reason === "clickaway") {
       return;
     }
-    props.setError(null);
+    props.setError({isError: false, errorMessage: null});
   };
   return (
     <Snackbar
-      open={props.error}
+      open={props.error.isError}
       autoHideDuration={10000}
       onClose={handleCloseSnackbar}
       sx={{ width: "100%" }}
@@ -22,7 +24,7 @@ export function ErrorComponent(props) {
         sx={{ width: "100%" }}
        
       >
-        {props.error}
+        {props.error.errorMessage}
       </Alert>
     </Snackbar>
   );

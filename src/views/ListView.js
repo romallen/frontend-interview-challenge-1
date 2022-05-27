@@ -20,7 +20,7 @@ export function ListView() {
   const [pageData, setPageData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-  const [fetchError, setFetchError] = useState(null);
+  const [fetchError, setFetchError] = useState({isError: false, errorMessage: null});
   const [detailsModalOpen, setDetailsModalOpen] = useState(false);
   const [selectedRowID, setSelectedRowID] = useState(null);
 
@@ -34,14 +34,14 @@ export function ListView() {
       .get(`http://localhost:3000/persons?page=${num}`)
       .then((res) => {
         if (res.data.errors) {
-          setFetchError(res.data.errors[0]);
+          setFetchError({isError: true, errorMessage: res.data.errors[0]});
         } else {
           setPageData(res.data);
           setIsLoading(false);
         }
       })
       .catch((err) => {
-        setFetchError(err.message);
+        setFetchError({isError: true, errorMessage: err.message});
         setIsLoading(false);
         console.log(err);
       });
@@ -56,7 +56,7 @@ export function ListView() {
 
   return (
     <Container>
-      {fetchError ? (
+      {fetchError.isError ? (
         <ErrorComponent error={fetchError} setError={setFetchError} />
       ) : null}
 
