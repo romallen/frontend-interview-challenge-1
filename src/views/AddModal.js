@@ -1,6 +1,8 @@
 import { useState } from "react";
 import {
   Box,
+  Button,
+  Chip,
   List,
   ListItem,
   FormControlLabel,
@@ -12,6 +14,7 @@ import {
   Typography,
 } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
+import { AddCircle } from "@mui/icons-material";
 import axios from "axios";
 import { customAlphabet } from "nanoid";
 
@@ -35,17 +38,27 @@ const personDataSchema = {
   comment: "",
 };
 export function AddModal(props) {
-  const [newPersonData, setNewPersonData] = useState({ personDataSchema });
+  const [newPersonData, setNewPersonData] = useState(personDataSchema);
+  const [books, setBooks] = useState([]);
+  const [chipBookData, setChipBookData] = useState([]);
+  const [isValidBook, setIsValidBook] = useState(false);
 
   const handleAddClick = () => {
+      const books = chipBookData.map((book) => book.label);
+      const data = {...newPersonData, favoriteBooks: books};
     axios
-      .post(`http://localhost:3000/persons`, newPersonData)
+      .post(`http://localhost:3000/persons`, data)
       .then((res) => {
         console.log(res.data);
       })
       .catch((err) => {
         console.log("Error: ", err);
       });
+  };
+
+  console.log("books", chipBookData);
+  const handleDelete = (chipToDelete) => {
+    setChipBookData((chips) => chips.filter((chip) => chip.key !== chipToDelete.key));
   };
 
   return (
@@ -59,7 +72,8 @@ export function AddModal(props) {
       >
         <FormGroup
           onChange={(e) => {
-            console.log(e.target.value);
+            console.log(newPersonData);
+
             setNewPersonData({
               ...newPersonData,
               [e.target.id]: e.target.value,
@@ -137,12 +151,56 @@ export function AddModal(props) {
             </ListItem>
             <ListItem>
               <Typography sx={{ mr: 2 }}>Favorite Books: </Typography>
+              {chipBookData.map((data) => {
+                let icon;
+                return (
+                  <Chip
+                    key={data.key}
+                    icon={icon}
+                    size="small"
+                    label={data.label}
+                    onDelete={() => handleDelete(data)}
+                  />
+                );
+              })}
               <TextField
                 id="favoriteBooks"
+                inputProps={{ minLength: 10, maxLength: 11 }}
+                type="text"
                 variant="standard"
+                placeholder="10 Digits Book ID"
+                onChange={(e) => {
+                  if (e.target.value.length > 9) {
+                    e.target.value =
+                      e.target.value.substring(0, 9) +
+                      "-" +
+                      e.target.value.substring(10);
+                  }
+                  if (e.target.value.length === 11) {
+                    setIsValidBook(true);
+                  }
+                }}
                 required
               ></TextField>
+              <Button
+                variant="outlined"
+                size="small"
+                disabled={!isValidBook}
+                onClick={() => {
+                  setChipBookData([
+                    ...chipBookData,
+                    {
+                      key: chipBookData.length,
+                      label: newPersonData.favoriteBooks,
+                    },
+                  ]);
+                  setIsValidBook(false);
+                }}
+              >
+                Add Book
+              </Button>
             </ListItem>
+
             <ListItem>
               <Typography sx={{ mr: 2 }}>Birthday: </Typography>
               <TextField
@@ -166,7 +224,6 @@ export function AddModal(props) {
               ) : (
                 <TextField
                   placeholder="Pick a Color"
-                  value={newPersonData.favoriteColor}
                   sx={{ width: "20%", ml: 1 }}
                   variant="standard"
                   required
