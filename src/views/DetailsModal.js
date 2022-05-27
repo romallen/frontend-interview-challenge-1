@@ -10,18 +10,19 @@ import {
   Typography,
 } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
+import DeleteIcon from "@mui/icons-material/Delete";
 import axios from "axios";
 
 export function DetailsModal(props) {
   const [personData, setPersonData] = useState(null);
   const [isUpdateLoading, setIsUpdateLoading] = useState(false);
+  const [isDeleteLoading, setIsDeleteLoading] = useState(false);
 
   useEffect(() => {
     if (props.id) {
       axios
         .get(`http://localhost:3000/persons/${props.id}`)
         .then((res) => {
-          console.log(res.data);
           setPersonData(res.data);
           props.setIsLoading(false);
         })
@@ -42,6 +43,20 @@ export function DetailsModal(props) {
       })
       .catch((err) => {
         setIsUpdateLoading(false);
+        console.log("Error: ", err);
+      });
+  };
+
+  const handleDeleteClick = () => {
+    setIsDeleteLoading(true);
+    axios
+      .delete(`http://localhost:3000/persons/${personData.id}`)
+      .then((res) => {
+        setIsDeleteLoading(false);
+        props.setDetailsModalOpen(false);
+      })
+      .catch((err) => {
+        setIsDeleteLoading(false);
         console.log("Error: ", err);
       });
   };
@@ -159,23 +174,42 @@ export function DetailsModal(props) {
             </List>
           </FormGroup>
 
-          <Box>
-            <Button
-              variant="contained"
-              sx={{ mr: 1 }}
-              onClick={() => props.setDetailsModalOpen(false)}
-            >
-              Cancel
-            </Button>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-between",
+              mx: 2,
+            }}
+          >
             <LoadingButton
-              type="submit"
-              onClick={handleUpdateClick}
-              loading={isUpdateLoading}
-              loadingIndicator="UPDATING..."
+              size="small"
+              startIcon={<DeleteIcon />}
+              onClick={handleDeleteClick}
+              loading={isDeleteLoading}
+              loadingIndicator="deleting..."
               variant="contained"
             >
-              UPDATE
+              DELETE
             </LoadingButton>
+            <Box>
+              <Button
+                variant="contained"
+                sx={{ mr: 1 }}
+                onClick={() => props.setDetailsModalOpen(false)}
+              >
+                Cancel
+              </Button>
+              <LoadingButton
+                type="submit"
+                onClick={handleUpdateClick}
+                loading={isUpdateLoading}
+                loadingIndicator="UPDATING..."
+                variant="contained"
+              >
+                UPDATE
+              </LoadingButton>
+            </Box>
           </Box>
         </Box>
       ) : (
