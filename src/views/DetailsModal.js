@@ -12,21 +12,29 @@ import {
 import LoadingButton from "@mui/lab/LoadingButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import axios from "axios";
+import { ErrorComponent } from "../components/ErrorComponent";
 
 export function DetailsModal(props) {
   const [personData, setPersonData] = useState(null);
   const [isUpdateLoading, setIsUpdateLoading] = useState(false);
   const [isDeleteLoading, setIsDeleteLoading] = useState(false);
+  const [detailsError, setDetailsError] = useState(null);
 
   useEffect(() => {
     if (props.id) {
       axios
         .get(`http://localhost:3000/persons/${props.id}`)
         .then((res) => {
-          setPersonData(res.data);
-          props.setIsLoading(false);
+          if (res.data.errors) {
+            setDetailsError(res.data.errors[0]);
+          } else {
+            setPersonData(res.data);
+            props.setIsLoading(false);
+          }
         })
         .catch((err) => {
+          props.setIsLoading(false);
+          setDetailsError(err.message);
           console.log("Error: ", err);
         });
     }
@@ -38,11 +46,16 @@ export function DetailsModal(props) {
     axios
       .patch(`http://localhost:3000/persons/${personData.id}`, personData)
       .then((res) => {
-        props.setDetailsModalOpen(false);
-        setIsUpdateLoading(false);
+        if (res.data.errors) {
+          setDetailsError(res.data.errors[0]);
+        } else {
+          props.setDetailsModalOpen(false);
+          setIsUpdateLoading(false);
+        }
       })
       .catch((err) => {
         setIsUpdateLoading(false);
+        setDetailsError(err.message);
         console.log("Error: ", err);
       });
   };
@@ -52,17 +65,24 @@ export function DetailsModal(props) {
     axios
       .delete(`http://localhost:3000/persons/${personData.id}`)
       .then((res) => {
-        setIsDeleteLoading(false);
-        props.setDetailsModalOpen(false);
+        if (res.data.errors) {
+          setDetailsError(res.data.errors[0]);
+        } else {
+          setIsDeleteLoading(false);
+          props.setDetailsModalOpen(false);
+        }
       })
       .catch((err) => {
         setIsDeleteLoading(false);
+        setDetailsError(err.message);
         console.log("Error: ", err);
       });
   };
 
   return (
     <Modal open={props.detailsModalOpen}>
+        <Box>
+      {detailsError ? <ErrorComponent error={detailsError} /> : null}
       {personData ? (
         <Box
           component="form"
@@ -215,6 +235,7 @@ export function DetailsModal(props) {
       ) : (
         <Box>loading</Box>
       )}
+      </Box>
     </Modal>
   );
 }
