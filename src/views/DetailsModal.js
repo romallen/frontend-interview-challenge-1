@@ -124,7 +124,7 @@ export function DetailsModal(props) {
             sx={{
               bgcolor: personData.favoriteColor,
               color: fontColor,
-              input: { color: fontColor },
+              input: { bgcolor: "lightgrey" },
               m: "0 auto",
               pb: 2,
               width: "70%",
