@@ -70,8 +70,8 @@ export function ListView() {
       {isLoading ? <LoadingComponent isLoading={isLoading} /> : null}
 
       {pageData ? (
-        <Box>
-          <TableContainer component={Paper}>
+        <Box sx={{ height:"100vh", display: "flex", flexDirection: "column", justifyContent: "space-between"}}>
+          <TableContainer component={Paper} sx={{mt:"20%"}}>
             <Table sx={{ minWidth: 400 }}>
               <TableHead>
                 <TableRow>
@@ -134,9 +134,8 @@ export function ListView() {
             sx={{
               display: "flex",
               flexDirection: "row",
-              justifyContent: "flex-end",
-              alignContent: "flex-end",
-              mt: 2,
+              justifyContent: "end",
+              mb: 4,
             }}
           >
             <AddCircle
@@ -148,9 +147,7 @@ export function ListView() {
             />
           </Box>
         </Box>
-      ) : (
-        <Box sx={{ pt: 10 }}>Could Not Load Data</Box>
-      )}
+      ) : null}
 
       {detailsModalOpen && (
         <DetailsModal
