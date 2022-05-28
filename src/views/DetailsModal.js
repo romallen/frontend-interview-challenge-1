@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import {
   Box,
   Button,
+  Container,
   FormGroup,
   List,
   ListItem,
@@ -89,8 +90,8 @@ export function DetailsModal(props) {
   };
 
   return (
-    <Modal open={props.detailsModalOpen}>
-      <Box>
+    <Modal open={props.detailsModalOpen} sx={{height: "100vh", overflow:'scroll'}}>
+      <Container>
         {detailsError.isError ? (
           <ErrorComponent error={detailsError} setError={setDetailsError} />
         ) : null}
@@ -103,8 +104,15 @@ export function DetailsModal(props) {
             sx={{
               bgcolor: personData.favoriteColor,
               m: "0 auto",
+              pb: 2,
               width: "70%",
-              py: 2,
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              borderRadius: "10px",
+              boxShadow: 2,
+              
             }}
           >
             <FormGroup
@@ -248,7 +256,7 @@ export function DetailsModal(props) {
         ) : (
           <Box>loading</Box>
         )}
-      </Box>
+      </Container>
     </Modal>
   );
 }
