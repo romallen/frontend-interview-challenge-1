@@ -3,6 +3,11 @@ import {
   Box,
   Button,
   Container,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   FormGroup,
   List,
   ListItem,
@@ -23,6 +28,7 @@ export function DetailsModal(props) {
     isError: false,
     errorMessage: null,
   });
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
 
   useEffect(() => {
     if (props.id) {
@@ -58,7 +64,10 @@ export function DetailsModal(props) {
         } else {
           props.setDetailsModalOpen(false);
           setIsUpdateLoading(false);
-          props.setIsSuccessful({isSuccessful: true, successMessage: "Updated successfully"});
+          props.setIsSuccessful({
+            isSuccessful: true,
+            successMessage: "Updated successfully",
+          });
         }
       })
       .catch((err) => {
@@ -78,8 +87,10 @@ export function DetailsModal(props) {
         } else {
           setIsDeleteLoading(false);
           props.setDetailsModalOpen(false);
-          props.setIsSuccessful({isSuccessful: true, successMessage: "Deleted successfully"});
-
+          props.setIsSuccessful({
+            isSuccessful: true,
+            successMessage: "Deleted successfully",
+          });
         }
       })
       .catch((err) => {
@@ -90,7 +101,10 @@ export function DetailsModal(props) {
   };
 
   return (
-    <Modal open={props.detailsModalOpen} sx={{height: "100vh", overflow:'scroll'}}>
+    <Modal
+      open={props.detailsModalOpen}
+      sx={{ height: "100vh", overflow: "scroll" }}
+    >
       <Container>
         {detailsError.isError ? (
           <ErrorComponent error={detailsError} setError={setDetailsError} />
@@ -112,7 +126,6 @@ export function DetailsModal(props) {
               transform: "translate(-50%, -50%)",
               borderRadius: "10px",
               boxShadow: 2,
-              
             }}
           >
             <FormGroup
@@ -163,19 +176,19 @@ export function DetailsModal(props) {
                 </ListItem>
 
                 <ListItem>
-                  <Typography sx={{ mr: 2 }}>Country: </Typography>
+                  <Typography sx={{ mx: 2 }}>Country: </Typography>
                   <Typography sx={{ mr: 2 }}>
                     {personData.address.country}{" "}
                   </Typography>
                 </ListItem>
                 <ListItem>
-                  <Typography sx={{ mr: 2 }}> Street Name: </Typography>
+                  <Typography sx={{ mx: 2 }}> Street Name: </Typography>
                   <Typography sx={{ mr: 2 }}>
                     {personData.address.streetName}
                   </Typography>
                 </ListItem>
                 <ListItem>
-                  <Typography sx={{ mr: 2 }}>City: </Typography>
+                  <Typography sx={{ mx: 2 }}>City: </Typography>
                   <Typography sx={{ mr: 2 }}>
                     {personData.address.city}{" "}
                   </Typography>
@@ -215,6 +228,32 @@ export function DetailsModal(props) {
               </List>
             </FormGroup>
 
+            <Dialog
+              open={openDeleteDialog}
+              onClose={() => setOpenDeleteDialog(false)}
+            >
+              <DialogTitle>{"Confirmation"}</DialogTitle>
+              <DialogContent>
+                <DialogContentText id="alert-dialog-description">
+                  You are about to delete this person. Are you sure?
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={() => setOpenDeleteDialog(false)}>
+                  cancel
+                </Button>
+                <Button
+                  onClick={() => {
+                    handleDeleteClick();
+                    setOpenDeleteDialog(false);
+                  }}
+                  autoFocus
+                >
+                  Delete
+                </Button>
+              </DialogActions>
+            </Dialog>
+            
             <Box
               sx={{
                 display: "flex",
@@ -226,7 +265,7 @@ export function DetailsModal(props) {
               <LoadingButton
                 size="small"
                 startIcon={<DeleteIcon />}
-                onClick={handleDeleteClick}
+                onClick={() => setOpenDeleteDialog(true)}
                 loading={isDeleteLoading}
                 loadingIndicator="deleting..."
                 variant="contained"
