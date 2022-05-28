@@ -18,8 +18,8 @@ import {
 import LoadingButton from "@mui/lab/LoadingButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import axios from "axios";
+import tinycolor from "tinycolor2";
 import { ErrorComponent } from "../components/ErrorComponent";
-
 export function DetailsModal(props) {
   const [personData, setPersonData] = useState(null);
   const [isUpdateLoading, setIsUpdateLoading] = useState(false);
@@ -29,6 +29,7 @@ export function DetailsModal(props) {
     errorMessage: null,
   });
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+  const [fontColor, setFontColor] = useState("#000000");
 
   useEffect(() => {
     if (props.id) {
@@ -43,6 +44,9 @@ export function DetailsModal(props) {
           } else {
             setPersonData(res.data);
             props.setIsLoading(false);
+            setFontColor(tinycolor
+              .mostReadable(res.data.favoriteColor, ["#ffffff", "#000000"])
+              .toHexString(),);
           }
         })
         .catch((err) => {
@@ -117,6 +121,8 @@ export function DetailsModal(props) {
             }}
             sx={{
               bgcolor: personData.favoriteColor,
+              color: fontColor,
+              input: { color: fontColor },
               m: "0 auto",
               pb: 2,
               width: "70%",
@@ -253,7 +259,7 @@ export function DetailsModal(props) {
                 </Button>
               </DialogActions>
             </Dialog>
-            
+
             <Box
               sx={{
                 display: "flex",
@@ -292,9 +298,7 @@ export function DetailsModal(props) {
               </Box>
             </Box>
           </Box>
-        ) : (
-          <Box>loading</Box>
-        )}
+        ) : null}
       </Container>
     </Modal>
   );
