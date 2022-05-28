@@ -99,6 +99,8 @@ export function AddModal(props) {
             bgcolor: "#ffffff",
             m: "0 auto",
             width: "70%",
+            maxWidth: "500px",
+            minWidth: "350px",
             pb: 2,
             position: "absolute",
             top: "50%",
@@ -210,7 +212,7 @@ export function AddModal(props) {
               </ListItem>
               <ListItem>
                 <Typography sx={{ mr: 2 }}>Favorite Books: </Typography>
-                <Box >
+                <Box>
                   {chipBookData.map((data) => {
                     let icon;
                     return (
@@ -227,7 +229,7 @@ export function AddModal(props) {
                     id="favoriteBooks"
                     inputProps={{ minLength: 10, maxLength: 11 }}
                     type="text"
-                    sx={{ml:1}}
+                    sx={{ ml: 1 }}
                     value={newPersonData.favoriteBooks}
                     variant="standard"
                     placeholder="Enter Book ID"
@@ -249,7 +251,7 @@ export function AddModal(props) {
                 <Button
                   variant="outlined"
                   size="small"
-                  sx={{ml:1}}
+                  sx={{ ml: 1 }}
                   disabled={!isValidBook}
                   onClick={() => {
                     setChipBookData([

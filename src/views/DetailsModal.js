@@ -44,9 +44,11 @@ export function DetailsModal(props) {
           } else {
             setPersonData(res.data);
             props.setIsLoading(false);
-            setFontColor(tinycolor
-              .mostReadable(res.data.favoriteColor, ["#ffffff", "#000000"])
-              .toHexString(),);
+            setFontColor(
+              tinycolor
+                .mostReadable(res.data.favoriteColor, ["#ffffff", "#000000"])
+                .toHexString()
+            );
           }
         })
         .catch((err) => {
@@ -126,6 +128,8 @@ export function DetailsModal(props) {
               m: "0 auto",
               pb: 2,
               width: "70%",
+              maxWidth: "500px",
+              minWidth: "350px",
               position: "absolute",
               top: "50%",
               left: "50%",
