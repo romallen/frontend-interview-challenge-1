@@ -1,5 +1,15 @@
 # Frontend interview challenge
 
+The assignment was completed using [Material UI](https://mui.com) for the components and styling. The following packages were also used:
+- [Axios]([https://reactnative.dev/](https://axios-http.com/)) was used to perform HTTP requests.
+- [Nanoid](https://github.com/ai/nanoid) was used to generate IDs when adding new users.
+- [Tinycolor2](https://bgrins.github.io/TinyColor/) was used to switch the font color in the Add Model. This was done to make the font more readable based on the background color.
+
+
+
+
+# Original Instructions
+
 Welcome to our frontend challenge! Before we describe the challenge in depth, we would like to foremost go through what we expect of you while you undertake our challenge and what you need to know beforehand
 
 ## What we expect from you
