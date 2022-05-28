@@ -61,7 +61,10 @@ export function AddModal(props) {
         } else {
           props.setAddModalOpen(false);
           props.setIsLoading(false);
-          props.setIsSuccessful({isSuccessful: true, successMessage: "Added successfully"});
+          props.setIsSuccessful({
+            isSuccessful: true,
+            successMessage: "Added successfully",
+          });
         }
       })
       .catch((err) => {
@@ -78,7 +81,10 @@ export function AddModal(props) {
   };
 
   return (
-    <Modal open={props.addModalOpen}>
+    <Modal
+      open={props.addModalOpen}
+      sx={{ height: "100vh", overflow: "scroll" }}
+    >
       <Box>
         {addError.isError ? (
           <ErrorComponent error={addError} setError={setAddError} />
@@ -89,7 +95,18 @@ export function AddModal(props) {
             e.preventDefault();
             handleAddClick();
           }}
-          sx={{ bgcolor: "#ffffff", m: "0 auto", width: "70%", py: 2 }}
+          sx={{
+            bgcolor: "#ffffff",
+            m: "0 auto",
+            width: "70%",
+            pb: 2,
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            borderRadius: "10px",
+            boxShadow: 2,
+          }}
         >
           <FormGroup
             onChange={(e) => {
@@ -176,11 +193,11 @@ export function AddModal(props) {
               </ListItem>
 
               <ListItem>
-                <Typography sx={{ mr: 2 }}>Country: </Typography>
+                <Typography sx={{ mx: 2 }}>Country: </Typography>
                 <TextField id="country" variant="standard" required></TextField>
               </ListItem>
               <ListItem>
-                <Typography sx={{ mr: 2 }}> Street Name: </Typography>
+                <Typography sx={{ mx: 2 }}> Street Name: </Typography>
                 <TextField
                   id="streetName"
                   variant="standard"
@@ -188,46 +205,51 @@ export function AddModal(props) {
                 ></TextField>
               </ListItem>
               <ListItem>
-                <Typography sx={{ mr: 2 }}>City: </Typography>
+                <Typography sx={{ mx: 2 }}>City: </Typography>
                 <TextField id="city" variant="standard" required></TextField>
               </ListItem>
               <ListItem>
                 <Typography sx={{ mr: 2 }}>Favorite Books: </Typography>
-                {chipBookData.map((data) => {
-                  let icon;
-                  return (
-                    <Chip
-                      key={data.key}
-                      icon={icon}
-                      size="small"
-                      label={data.label}
-                      onDelete={() => handleDelete(data)}
-                    />
-                  );
-                })}
-                <TextField
-                  id="favoriteBooks"
-                  inputProps={{ minLength: 10, maxLength: 11 }}
-                  type="text"
-                  value={newPersonData.favoriteBooks}
-                  variant="standard"
-                  placeholder="10 Digits Book ID"
-                  onChange={(e) => {
-                    if (e.target.value.length > 9) {
-                      e.target.value =
-                        e.target.value.substring(0, 9) +
-                        "-" +
-                        e.target.value.substring(10);
-                    }
-                    if (e.target.value.length === 11) {
-                      setIsValidBook(true);
-                    }
-                  }}
-                  required={chipBookData.length === 0}
-                ></TextField>
+                <Box >
+                  {chipBookData.map((data) => {
+                    let icon;
+                    return (
+                      <Chip
+                        key={data.key}
+                        icon={icon}
+                        size="small"
+                        label={data.label}
+                        onDelete={() => handleDelete(data)}
+                      />
+                    );
+                  })}
+                  <TextField
+                    id="favoriteBooks"
+                    inputProps={{ minLength: 10, maxLength: 11 }}
+                    type="text"
+                    sx={{ml:1}}
+                    value={newPersonData.favoriteBooks}
+                    variant="standard"
+                    placeholder="Enter Book ID"
+                    onChange={(e) => {
+                      if (e.target.value.length > 9) {
+                        e.target.value =
+                          e.target.value.substring(0, 9) +
+                          "-" +
+                          e.target.value.substring(10);
+                      }
+                      if (e.target.value.length === 11) {
+                        setIsValidBook(true);
+                      }
+                    }}
+                    required={chipBookData.length === 0}
+                  ></TextField>
+                </Box>
+
                 <Button
                   variant="outlined"
                   size="small"
+                  sx={{ml:1}}
                   disabled={!isValidBook}
                   onClick={() => {
                     setChipBookData([
@@ -289,7 +311,6 @@ export function AddModal(props) {
                 <TextField
                   id="comment"
                   variant="outlined"
-                  rows={2}
                   multiline
                 ></TextField>
               </ListItem>
