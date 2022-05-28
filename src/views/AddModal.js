@@ -131,7 +131,7 @@ export function AddModal(props) {
               }
             }}
           >
-            <List>
+            <List dense={true}>
               <ListItem>
                 <Typography sx={{ mr: 2 }}>Title: </Typography>
                 <TextField

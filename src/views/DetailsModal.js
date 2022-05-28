@@ -142,7 +142,7 @@ export function DetailsModal(props) {
                 });
               }}
             >
-              <List>
+              <List dense={true}>
                 <ListItem>
                   <Typography sx={{ mr: 2 }}>ID: </Typography>
                   <Typography sx={{ mr: 2 }}>{personData.id} </Typography>
