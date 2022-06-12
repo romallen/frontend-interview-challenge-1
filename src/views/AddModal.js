@@ -41,12 +41,14 @@ export function AddModal(props) {
   const [newPersonData, setNewPersonData] = useState(personDataSchema);
   const [chipBookData, setChipBookData] = useState([]);
   const [isValidBook, setIsValidBook] = useState(false);
+  const [isAddLoading, setIsAddLoading] = useState(false);
   const [addError, setAddError] = useState({
     isError: false,
     errorMessage: null,
   });
 
   const handleAddClick = () => {
+    setIsAddLoading(true);
     const books = chipBookData.map((book) => book.label);
     const data = { ...newPersonData, favoriteBooks: books };
 
@@ -59,22 +61,24 @@ export function AddModal(props) {
             errorMessage: res.data.errors[0],
           });
         } else {
+          setTimeout(() => {
           props.setAddModalOpen(false);
-          props.setIsLoading(false);
+          setIsAddLoading(false);
           props.setIsSuccessful({
             isSuccessful: true,
             successMessage: "Added successfully",
           });
+          }, 5000);
         }
       })
       .catch((err) => {
-        props.setIsLoading(false);
+        setIsAddLoading(false);
         setAddError({ isError: true, errorMessage: err.message });
         console.log("Error: ", err);
       });
   };
 
-  const handleDelete = (chipToDelete) => {
+  const handleChipDelete = (chipToDelete) => {
     setChipBookData((chips) =>
       chips.filter((chip) => chip.key !== chipToDelete.key)
     );
@@ -221,7 +225,7 @@ export function AddModal(props) {
                         icon={icon}
                         size="small"
                         label={data.label}
-                        onDelete={() => handleDelete(data)}
+                        onDelete={() => handleChipDelete(data)}
                       />
                     );
                   })}
@@ -337,9 +341,10 @@ export function AddModal(props) {
             </Button>
             <LoadingButton
               type="submit"
-              // loading={isUpdateLoading}
+              loading={isAddLoading}
               loadingIndicator="ADDING..."
               variant="contained"
+              size="large"
             >
               ADD
             </LoadingButton>

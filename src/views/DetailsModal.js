@@ -30,8 +30,9 @@ export function DetailsModal(props) {
   });
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [fontColor, setFontColor] = useState("#000000");
-
+  
   useEffect(() => {
+    props.setIsLoading(true);
     if (props.id) {
       axios
         .get(`http://localhost:3000/persons/${props.id}`)
